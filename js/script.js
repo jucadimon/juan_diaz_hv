@@ -60,6 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Datos de ejemplo para proyectos
     const projectsData = {
+        0: {
+            title: "Nombre Detallado del Proyecto 0",
+            image: "images/project0-large.jpg", // Imagen más grande para el modal
+            fullDescription: "<p>Aquí va la descripción completa del Proyecto 0. Incluye detalles como: objetivos del proyecto, desafíos encontrados, soluciones implementadas, tu rol específico (diseño, supervisión, gestión), presupuesto (si es relevante y público), duración, y resultados obtenidos.</p><h4>Tecnologías Utilizadas:</h4><ul><li>AutoCAD</li><li>Revit</li><li>Software de cálculo estructural XYZ</li></ul><h4>Impacto:</h4><p>El proyecto mejoró [aspecto específico] y benefició a [grupo de personas/comunidad].</p>",
+            formEnabled: false // Generalmente no se pone formulario de servicio en detalle de proyecto, pero es una opción
+        },
         1: {
             title: "Nombre Detallado del Proyecto 1",
             image: "images/project1-large.jpg", // Imagen más grande para el modal
