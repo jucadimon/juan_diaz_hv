@@ -1,9 +1,9 @@
 /* Estilos Generales y Variables */
 :root {
-    --primary-color: #005A9C; /* Azul oscuro para ingeniería */
-    --secondary-color: #F5A623; /* Naranja/Amarillo para acentos */
-    --text-color: #333;
-    --light-gray: #f4f4f4;
+    --primary-color: #2A2A72; /* Azul oscuro para ingeniería */
+    --secondary-color: #FFA400; /* Naranja/Amarillo para acentos */
+    --text-color: #232528;
+    --light-gray: #EAF6FF;
     --dark-gray: #555;
     --white: #fff;
     --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -16,7 +16,7 @@
 }
 
 body {
-    font-family: "Segoe UI", sans-serif; /* Cambia por tu fuente preferida */
+    font-family: 'Segoe UI', sans-serif; /* Cambia por tu fuente preferida */
     line-height: 1.2;
     color: var(--text-color);
     background-color: var(--white);
