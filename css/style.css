@@ -16,8 +16,8 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif; /* Cambia por tu fuente preferida */
-    line-height: 1.6;
+    font-family: "Segoe UI", sans-serif; /* Cambia por tu fuente preferida */
+    line-height: 1.2;
     color: var(--text-color);
     background-color: var(--white);
 }
