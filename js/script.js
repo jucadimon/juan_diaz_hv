@@ -71,8 +71,14 @@ document.addEventListener('DOMContentLoaded', function() {
             image: "images/project2-large.jpg",
             fullDescription: "<p>Descripción exhaustiva del Proyecto 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.</p>",
             formEnabled: false
-        }
+        },
         // Añade más datos de proyectos aquí
+        3: {
+            title: "Nombre Detallado del Proyecto 3",
+            image: "images/project3-large.jpg",
+            fullDescription: "<p>Descripción exhaustiva del Proyecto 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.</p>",
+            formEnabled: false
+        }
     };
 
     // Función para abrir el modal
