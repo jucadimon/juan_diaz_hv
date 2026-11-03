@@ -104,6 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
             `<div class="slider-dots"></div></div>`;
     }
 
+    const AUTOPLAY_MS = 3000; // tiempo entre fotos (3 segundos)
+    const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const CAN_HOVER = window.matchMedia('(hover: hover)').matches;
+
     function initSlider(slider) {
         if (!slider || slider.dataset.ready) return;
         slider.dataset.ready = 'true';
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dot.type = 'button';
             dot.className = 'slider-dot';
             dot.setAttribute('aria-label', `Ir a la foto ${i + 1}`);
-            dot.addEventListener('click', () => goTo(i));
+            dot.addEventListener('click', () => { goTo(i); restart(); });
             dotsBox.appendChild(dot);
             dots.push(dot);
         });
@@ -138,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
             dots.forEach((d, j) => d.classList.toggle('active', j === index));
         }
 
-        prev.addEventListener('click', () => goTo(index - 1));
-        next.addEventListener('click', () => goTo(index + 1));
+        prev.addEventListener('click', () => { goTo(index - 1); restart(); });
+        next.addEventListener('click', () => { goTo(index + 1); restart(); });
 
         // Deslizar con el dedo en celular
         let startX = null;
@@ -147,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slider.addEventListener('touchend', e => {
             if (startX === null) return;
             const dx = e.changedTouches[0].clientX - startX;
-            if (Math.abs(dx) > 40) goTo(index + (dx < 0 ? 1 : -1));
+            if (Math.abs(dx) > 40) { goTo(index + (dx < 0 ? 1 : -1)); restart(); }
             startX = null;
         });
 
@@ -156,6 +160,30 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'ArrowLeft') goTo(index - 1);
             if (e.key === 'ArrowRight') goTo(index + 1);
         });
+
+        // Reproducción automática: pasa de foto cada 3 s mientras el cursor está encima
+        let timer = null;
+        function stop() { clearInterval(timer); timer = null; }
+        function start() {
+            if (timer || REDUCE_MOTION) return;
+            timer = setInterval(() => {
+                if (!slider.isConnected || slider.offsetParent === null) { stop(); return; }
+                goTo(index + 1);
+            }, AUTOPLAY_MS);
+        }
+        function restart() { if (timer) { stop(); start(); } }
+
+        slider.addEventListener('mouseenter', start);
+        slider.addEventListener('mouseleave', stop);
+        slider.addEventListener('focusin', start);
+        slider.addEventListener('focusout', stop);
+
+        // En celulares (sin cursor) corre mientras el slider se ve en pantalla
+        if (!CAN_HOVER && 'IntersectionObserver' in window) {
+            new IntersectionObserver(entries => {
+                entries.forEach(en => (en.isIntersecting ? start() : stop()));
+            }, { threshold: 0.6 }).observe(slider);
+        }
 
         goTo(0);
     }
@@ -187,7 +215,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const service = servicesData[serviceId];
             if (service && modal) {
                 let modalContent = `<h3>${service.title}</h3>`;
-                if (service.image) {
+                if (service.images && service.images.length) {
+                    modalContent += buildSliderHTML(service.images, service.title);
+                } else if (service.image) {
                     modalContent += `<img src="${service.image}" alt="${service.title}" class="modal-image">`;
                 }
                 modalContent += service.description;
