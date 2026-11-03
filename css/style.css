@@ -618,3 +618,15 @@ footer a:hover {
     border-radius: 5px;
     margin-bottom: 15px;
 }
+
+/* Foto pendiente de subir */
+.slider-slide.no-photo img { display: none; }
+.slider-slide.no-photo::after {
+    content: "Foto próximamente";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--dark-gray);
+    font-size: 0.9em;
+}
