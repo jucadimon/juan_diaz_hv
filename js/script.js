@@ -61,10 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Datos de ejemplo para proyectos
     const projectsData = {
         0: {
-            title: "Nombre Detallado del Proyecto 0",
-            image: "images/project0-large.jpg", // Imagen más grande para el modal
-            fullDescription: "<p>Aquí va la descripción completa del Proyecto 0. Incluye detalles como: objetivos del proyecto, desafíos encontrados, soluciones implementadas, tu rol específico (diseño, supervisión, gestión), presupuesto (si es relevante y público), duración, y resultados obtenidos.</p><h4>Tecnologías Utilizadas:</h4><ul><li>AutoCAD</li><li>Revit</li><li>Software de cálculo estructural XYZ</li></ul><h4>Impacto:</h4><p>El proyecto mejoró [aspecto específico] y benefició a [grupo de personas/comunidad].</p>",
-            formEnabled: false // Generalmente no se pone formulario de servicio en detalle de proyecto, pero es una opción
+            title: "Ingeniero Civil – Actas de Vecindad, Autopista al Mar 2",
+            images: [
+                "images/001-exp-empresa-1.jpg",
+                "images/002-exp-empresa-1.jpg",
+                "images/003-exp-empresa-1.jpg",
+                "images/004-exp-empresa-1.jpg"
+            ],
+            fullDescription: "<p class=\"exp-company\">Gestión Legal Asociados SAS · NIT 901.039.233-7</p><p class=\"exp-meta\"><i class=\"fas fa-map-marker-alt\"></i> Cañasgordas, Uramita, Dabeiba y Mutatá (Antioquia)</p><p class=\"exp-meta\"><i class=\"fas fa-calendar-alt\"></i> 29/11/2017 – 05/07/2018 · Contrato de 7 meses</p><h4>Funciones y responsabilidades:</h4><ul><li>Levantamiento y elaboración de actas de vecindad de acuerdo con los lineamientos establecidos, dejando constancia del estado de los predios y estructuras colindantes antes de la intervención.</li><li>Ejecución del levantamiento a lo largo del corredor Cañasgordas – Mutatá, correspondiente a las Unidades Funcionales 1, 2, 3 y 4 del proyecto Autopista al Mar 2.</li></ul><h4>Herramientas:</h4><p>Microsoft Excel, Microsoft Word y AutoCAD.</p>",
+            formEnabled: false// Generalmente no se pone formulario de servicio en detalle de proyecto, pero es una opción
         },
         1: {
             title: "Nombre Detallado del Proyecto 1",
@@ -87,9 +92,84 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    
+    // --- Slider de fotos ---
+    function buildSliderHTML(images, altBase) {
+        const slides = images.map((src, i) =>
+            `<div class="slider-slide"><img src="${src}" alt="${altBase} - foto ${i + 1}" loading="lazy"></div>`
+        ).join('');
+        return `<div class="slider" data-slider tabindex="0" aria-roledescription="carrusel" aria-label="Fotos: ${altBase}">` +
+            `<div class="slider-track">${slides}</div>` +
+            `<button type="button" class="slider-btn slider-prev" aria-label="Foto anterior"><i class="fas fa-chevron-left"></i></button>` +
+            `<button type="button" class="slider-btn slider-next" aria-label="Foto siguiente"><i class="fas fa-chevron-right"></i></button>` +
+            `<div class="slider-dots"></div></div>`;
+    }
+
+    function initSlider(slider) {
+        if (!slider || slider.dataset.ready) return;
+        slider.dataset.ready = 'true';
+
+        const track = slider.querySelector('.slider-track');
+        const slides = slider.querySelectorAll('.slider-slide');
+        const prev = slider.querySelector('.slider-prev');
+        const next = slider.querySelector('.slider-next');
+        const dotsBox = slider.querySelector('.slider-dots');
+        const total = slides.length;
+        let index = 0;
+
+        if (total <= 1) {
+            [prev, next, dotsBox].forEach(el => { if (el) el.style.display = 'none'; });
+            return;
+        }
+
+        const dots = [];
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'slider-dot';
+            dot.setAttribute('aria-label', `Ir a la foto ${i + 1}`);
+            dot.addEventListener('click', () => goTo(i));
+            dotsBox.appendChild(dot);
+            dots.push(dot);
+        });
+
+        function goTo(i) {
+            index = (i + total) % total;
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((d, j) => d.classList.toggle('active', j === index));
+        }
+
+        prev.addEventListener('click', () => goTo(index - 1));
+        next.addEventListener('click', () => goTo(index + 1));
+
+        // Deslizar con el dedo en celular
+        let startX = null;
+        slider.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+        slider.addEventListener('touchend', e => {
+            if (startX === null) return;
+            const dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 40) goTo(index + (dx < 0 ? 1 : -1));
+            startX = null;
+        });
+
+        // Flechas del teclado
+        slider.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') goTo(index - 1);
+            if (e.key === 'ArrowRight') goTo(index + 1);
+        });
+
+        goTo(0);
+    }
+
+    // Activa los sliders que ya están en la página (tarjetas de experiencia)
+    document.querySelectorAll('[data-slider]').forEach(initSlider);
+    
+    
+    
     // Función para abrir el modal
     function openModal(content, serviceName, showForm) {
         if (modalBody) modalBody.innerHTML = content;
+        if (modalBody) modalBody.querySelectorAll('[data-slider]').forEach(initSlider);
         if (modal) modal.style.display = 'block';
 
         const modalFormContainer = document.querySelector('.modal-service-request-form');
