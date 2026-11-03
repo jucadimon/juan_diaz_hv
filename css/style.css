@@ -496,3 +496,125 @@ footer a:hover {
         margin: 20% auto;
     }
 }
+
+
+/* ===== Slider de fotos (experiencia laboral) ===== */
+.slider {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    flex-shrink: 0;
+    background-color: var(--light-gray);
+}
+.slider-track {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    transition: transform 0.4s ease;
+}
+.slider-slide {
+    flex: 0 0 100%;
+    height: 100%;
+}
+.slider .slider-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(42, 42, 114, 0.75);
+    color: var(--white);
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.slider-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+.slider-prev { left: 10px; }
+.slider-next { right: 10px; }
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 2;
+}
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+}
+.slider-dot.active {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.slider:focus-visible {
+    outline: 3px solid var(--secondary-color);
+    outline-offset: -3px;
+}
+.modal .slider {
+    aspect-ratio: 16 / 10;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* ===== Tarjeta y detalle de experiencia ===== */
+.experience-item .gallery-item-info {
+    justify-content: flex-start;
+}
+.experience-item .gallery-item-info p {
+    line-height: 1.5;
+}
+.exp-company {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.exp-meta {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+    margin-bottom: 6px;
+}
+.exp-meta i,
+.exp-tech i {
+    color: var(--secondary-color);
+    width: 18px;
+}
+.exp-tech {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+}
+#modal-body p,
+#modal-body li {
+    line-height: 1.5;
+}
+#modal-body ul {
+    margin: 0 0 1em 20px;
+}
+#modal-body h4 {
+    margin: 15px 0 5px;
+    color: var(--primary-color);
+}
+
+/* Slider dentro de tarjetas de servicios y aliados */
+.service-item .slider,
+.ally-card .slider {
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
