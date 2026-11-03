@@ -13,3 +13,19 @@ mi_portafolio_ingeniero/
     ├── service1-icon.png
     ├── ally1-logo.png
     └── (otras imágenes que necesites)
+
+
+Nombres de las fotos. Son 4 por experiencia, con el número de la experiencia en orden cronológico:
+
+N	Experiencia	Archivos
+1	Gestión Legal Asociados	001 a 004-exp-empresa-1.jpg (ya las subiste)
+2	Cancha Las Delicias	001 a 004-exp-empresa-2.jpg
+3	Intradomiciliarias 2020	001 a 004-exp-empresa-3.jpg
+4	Estudios Astrea 2021	001 a 004-exp-empresa-4.jpg
+5	Interurbanas Fase I	001 a 004-exp-empresa-5.jpg
+6	Intertoscano 2022	001 a 004-exp-empresa-6.jpg
+7	Plaza Mercado Astrea	001 a 004-exp-empresa-7.jpg
+8	AMCO	001 a 004-exp-empresa-8.jpg
+9	Contrato de Mínima Cuantía	001 a 004-exp-empresa-9.jpg
+10	SETEC	001 a 004-exp-empresa-10.jpg
+11	ISC	001 a 004-exp-empresa-11.jpg
