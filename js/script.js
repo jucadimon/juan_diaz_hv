@@ -1,309 +1,610 @@
-document.addEventListener('DOMContentLoaded', function() {
+/* Estilos Generales y Variables */
+:root {
+    --primary-color: #2A2A72; /* Azul oscuro para ingeniería */
+    --secondary-color: #FFA400; /* Naranja/Amarillo para acentos */
+    --text-color: #232528;
+    --light-gray: #EAF6FF;
+    --dark-gray: #555;
+    --white: #fff;
+    --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
-    // --- Navbar Toggle para Móvil ---
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            // Cambiar ícono de hamburguesa a X y viceversa
-            const icon = navToggle.querySelector('i');
-            if (navMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-                navToggle.setAttribute('aria-label', 'Cerrar menú');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-                navToggle.setAttribute('aria-label', 'Abrir menú');
-            }
-        });
+body {
+    font-family: 'Segoe UI', sans-serif; /* Cambia por tu fuente preferida */
+    line-height: 1.2;
+    color: var(--text-color);
+    background-color: var(--white);
+}
 
-        // Cerrar menú al hacer clic en un enlace (para SPAs o navegación en la misma página)
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
-                    const icon = navToggle.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                    navToggle.setAttribute('aria-label', 'Abrir menú');
-                }
-            });
-        });
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+    overflow: hidden; /* Para contener floats si los usas */
+}
+
+h1, h2, h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.8em;
+}
+
+h1 { font-size: 2.8em; }
+h2 { font-size: 2.2em; }
+h3 { font-size: 1.5em; }
+
+p { margin-bottom: 1em; }
+a { color: var(--primary-color); text-decoration: none; }
+a:hover { color: var(--secondary-color); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* Navbar */
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.navbar .logo a {
+    color: var(--white);
+    font-size: 1.5em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.navbar .logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+.nav-menu li {
+    margin-left: 20px;
+}
+
+.nav-menu a {
+    color: var(--white);
+    padding: 0.5em 1em;
+    transition: background-color 0.3s ease;
+}
+
+.nav-menu a:hover, .nav-menu a.active {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+}
+
+.nav-toggle {
+    display: none; /* Oculto en escritorio */
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 1.8em;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 90, 156, 0.7), rgba(0, 90, 156, 0.7)), url('../images/hero-background.jpg') no-repeat center center/cover;
+    height: 80vh; /* Ajusta según necesites */
+    min-height: 400px;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    margin-top: 70px; /* Altura del navbar */
+}
+
+.hero-content h1 {
+    font-size: 3.5em;
+    margin-bottom: 0.5em;
+    color: var(--white);
+}
+.hero-content p {
+    font-size: 1.5em;
+    margin-bottom: 1.5em;
+}
+.cta-button {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.cta-button:hover {
+    background-color: #e09110;
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Sobre Mí Section */
+#sobre-mi {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.sobre-mi-content {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+.profile-pic {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid var(--secondary-color);
+    box-shadow: var(--box-shadow);
+}
+.sobre-mi-content div {
+    flex: 1;
+}
+
+/* Portafolio y Servicios Gallery Style */
+.gallery, .services-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.gallery-item, .service-item {
+    background-color: var(--white);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.gallery-item:hover, .service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.gallery-item-info, .service-item {
+    padding: 20px;
+    flex-grow: 1; /* Asegura que el padding ocupe espacio aunque el contenido sea corto */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Para que el botón quede abajo si es necesario */
+}
+.service-item .service-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+    align-self: center; /* Centra el ícono */
+}
+.service-item h3 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+.service-summary {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+    margin-bottom: 15px;
+    flex-grow: 1;
+    text-align: center;
+}
+.view-project-button, .view-service-button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    align-self: center; /* Centra el botón */
+    margin-top: auto; /* Empuja el botón hacia abajo */
+}
+.view-project-button:hover, .view-service-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Aliados Estratégicos */
+#aliados {
+    background-color: var(--light-gray);
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.allies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+.ally-card {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    text-align: center;
+}
+.ally-logo {
+    max-height: 80px;
+    margin: 0 auto 15px auto;
+}
+.ally-card h3 { margin-bottom: 10px; }
+.ally-card p { font-size: 0.9em; color: var(--dark-gray); margin-bottom: 15px; }
+.ally-card h4 { margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; color: var(--primary-color); }
+.ally-card ul {
+    list-style: disc;
+    margin-left: 20px;
+    text-align: left;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+.ally-link {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.ally-link:hover {
+    background-color: #e09110;
+}
+
+/* Contacto Section */
+#contacto {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr; /* Columna de info más pequeña que la de formularios */
+    gap: 40px;
+}
+.contact-info p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+.contact-info p i {
+    color: var(--secondary-color);
+    margin-right: 10px;
+    width: 20px; /* Para alinear iconos */
+}
+.social-media {
+    margin-top: 20px;
+}
+.social-media a {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+.social-media a:hover {
+    color: var(--secondary-color);
+}
+
+/* Formularios */
+.form-container {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-gray);
+    border-radius: 8px;
+}
+.form-container h3 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+select {
+    appearance: none; /* Para mejor estilo en diferentes navegadores */
+    background: var(--white) url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23555%22/%3E%3C/svg%3E') no-repeat right 10px center;
+    background-size: 16px;
+}
+textarea {
+    resize: vertical;
+}
+form button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+form button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--dark-gray);
+    color: var(--light-gray);
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+footer p {
+    margin-bottom: 5px;
+}
+footer a {
+    color: var(--secondary-color);
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1001; /* Encima del navbar */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6); /* Fondo oscuro semitransparente */
+}
+.modal-content {
+    background-color: var(--white);
+    margin: 10% auto; /* Centrado y con espacio arriba/abajo */
+    padding: 30px;
+    border: 1px solid #888;
+    width: 70%; /* Ancho del modal */
+    max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-button {
+    color: var(--dark-gray);
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+#modal-body h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+#modal-body img.modal-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.modal-service-request-form {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
+}
+.modal-service-request-form h3 {
+    font-size: 1.2em;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none; /* Ocultar menú en móvil */
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 70px; /* Altura del navbar */
+        left: 0;
+        background-color: var(--primary-color);
+        padding: 10px 0;
+    }
+    .nav-menu.active {
+        display: flex; /* Mostrar cuando está activo */
+    }
+    .nav-menu li {
+        margin: 0;
+        text-align: center;
+    }
+    .nav-menu a {
+        display: block;
+        padding: 15px;
+    }
+    .nav-toggle {
+        display: block; /* Mostrar botón hamburguesa */
     }
 
+    .hero-content h1 { font-size: 2.5em; }
+    .hero-content p { font-size: 1.2em; }
 
-    // --- Modal para Servicios y Proyectos ---
-    const modal = document.getElementById('modal');
-    const modalBody = document.getElementById('modal-body');
-    const modalServiceNameInput = document.getElementById('modalServiceName'); // Para el formulario del modal
-    const closeButton = document.querySelector('.close-button');
-
-    // Datos de ejemplo para servicios (podrías cargarlos desde un JSON o directamente aquí)
-    const servicesData = {
-        s1: {
-            title: "Nombre del Servicio/Producto 1",
-            image: "images/service1-large.jpg", // Imagen más grande para el modal
-            description: "<p>Esta es una descripción <strong>mucho más detallada</strong> del Servicio/Producto 1. Aquí puedes explicar en profundidad los beneficios, metodologías, tecnologías utilizadas, y casos de éxito relacionados.</p><ul><li>Beneficio clave 1</li><li>Metodología aplicada</li><li>Tecnología innovadora</li></ul><p>Contacta para una cotización personalizada.</p>",
-            formEnabled: true // Habilita el mini formulario en el modal para este servicio
-        },
-        s2: {
-            title: "Nombre del Servicio/Producto 2",
-            image: "images/service2-large.jpg",
-            description: "<p>Detalles completos sobre el Servicio/Producto 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>",
-            formEnabled: true
-        }
-        // Añade más datos de servicios aquí con sus IDs
-    };
-
-    // Datos de ejemplo para proyectos
-    const projectsData = {
-        0: {
-            title: "Ingeniero Civil – Actas de Vecindad, Autopista al Mar 2",
-            images: [
-                "images/001-exp-empresa-1.jpg",
-                "images/002-exp-empresa-1.jpg",
-                "images/003-exp-empresa-1.jpg",
-                "images/004-exp-empresa-1.jpg"
-            ],
-            fullDescription: "<p class=\"exp-company\">Gestión Legal Asociados SAS · NIT 901.039.233-7</p><p class=\"exp-meta\"><i class=\"fas fa-map-marker-alt\"></i> Cañasgordas, Uramita, Dabeiba y Mutatá (Antioquia)</p><p class=\"exp-meta\"><i class=\"fas fa-calendar-alt\"></i> 29/11/2017 – 05/07/2018 · Contrato de 7 meses</p><h4>Funciones y responsabilidades:</h4><ul><li>Levantamiento y elaboración de actas de vecindad de acuerdo con los lineamientos establecidos, dejando constancia del estado de los predios y estructuras colindantes antes de la intervención.</li><li>Ejecución del levantamiento a lo largo del corredor Cañasgordas – Mutatá, correspondiente a las Unidades Funcionales 1, 2, 3 y 4 del proyecto Autopista al Mar 2.</li></ul><h4>Herramientas:</h4><p>Microsoft Excel, Microsoft Word y AutoCAD.</p>",
-            formEnabled: false// Generalmente no se pone formulario de servicio en detalle de proyecto, pero es una opción
-        },
-        1: {
-            title: "Nombre Detallado del Proyecto 1",
-            image: "images/project1-large.jpg", // Imagen más grande para el modal
-            fullDescription: "<p>Aquí va la descripción completa del Proyecto 1. Incluye detalles como: objetivos del proyecto, desafíos encontrados, soluciones implementadas, tu rol específico (diseño, supervisión, gestión), presupuesto (si es relevante y público), duración, y resultados obtenidos.</p><h4>Tecnologías Utilizadas:</h4><ul><li>AutoCAD</li><li>Revit</li><li>Software de cálculo estructural XYZ</li></ul><h4>Impacto:</h4><p>El proyecto mejoró [aspecto específico] y benefició a [grupo de personas/comunidad].</p>",
-            formEnabled: false // Generalmente no se pone formulario de servicio en detalle de proyecto, pero es una opción
-        },
-        2: {
-            title: "Nombre Detallado del Proyecto 2",
-            image: "images/project2-large.jpg",
-            fullDescription: "<p>Descripción exhaustiva del Proyecto 2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.</p>",
-            formEnabled: false
-        },
-        // Añade más datos de proyectos aquí
-        3: {
-            title: "Nombre Detallado del Proyecto 3",
-            image: "images/project3-large.jpg",
-            fullDescription: "<p>Descripción exhaustiva del Proyecto 3. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.</p>",
-            formEnabled: false
-        }
-    };
-
-    
-    // --- Slider de fotos ---
-    function buildSliderHTML(images, altBase) {
-        const slides = images.map((src, i) =>
-            `<div class="slider-slide"><img src="${src}" alt="${altBase} - foto ${i + 1}" loading="lazy"></div>`
-        ).join('');
-        return `<div class="slider" data-slider tabindex="0" aria-roledescription="carrusel" aria-label="Fotos: ${altBase}">` +
-            `<div class="slider-track">${slides}</div>` +
-            `<button type="button" class="slider-btn slider-prev" aria-label="Foto anterior"><i class="fas fa-chevron-left"></i></button>` +
-            `<button type="button" class="slider-btn slider-next" aria-label="Foto siguiente"><i class="fas fa-chevron-right"></i></button>` +
-            `<div class="slider-dots"></div></div>`;
+    .sobre-mi-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .profile-pic {
+        margin-bottom: 20px;
     }
 
-    function initSlider(slider) {
-        if (!slider || slider.dataset.ready) return;
-        slider.dataset.ready = 'true';
-
-        const track = slider.querySelector('.slider-track');
-        const slides = slider.querySelectorAll('.slider-slide');
-        const prev = slider.querySelector('.slider-prev');
-        const next = slider.querySelector('.slider-next');
-        const dotsBox = slider.querySelector('.slider-dots');
-        const total = slides.length;
-        let index = 0;
-
-        if (total <= 1) {
-            [prev, next, dotsBox].forEach(el => { if (el) el.style.display = 'none'; });
-            return;
-        }
-
-        const dots = [];
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.type = 'button';
-            dot.className = 'slider-dot';
-            dot.setAttribute('aria-label', `Ir a la foto ${i + 1}`);
-            dot.addEventListener('click', () => goTo(i));
-            dotsBox.appendChild(dot);
-            dots.push(dot);
-        });
-
-        function goTo(i) {
-            index = (i + total) % total;
-            track.style.transform = `translateX(-${index * 100}%)`;
-            dots.forEach((d, j) => d.classList.toggle('active', j === index));
-        }
-
-        prev.addEventListener('click', () => goTo(index - 1));
-        next.addEventListener('click', () => goTo(index + 1));
-
-        // Deslizar con el dedo en celular
-        let startX = null;
-        slider.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-        slider.addEventListener('touchend', e => {
-            if (startX === null) return;
-            const dx = e.changedTouches[0].clientX - startX;
-            if (Math.abs(dx) > 40) goTo(index + (dx < 0 ? 1 : -1));
-            startX = null;
-        });
-
-        // Flechas del teclado
-        slider.addEventListener('keydown', e => {
-            if (e.key === 'ArrowLeft') goTo(index - 1);
-            if (e.key === 'ArrowRight') goTo(index + 1);
-        });
-
-        goTo(0);
+    .contact-grid {
+        grid-template-columns: 1fr; /* Una columna en móvil */
+    }
+    .contact-info {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .contact-info p i {
+        display: block; /* Iconos encima del texto */
+        margin: 0 auto 5px auto;
     }
 
-    // Activa los sliders que ya están en la página (tarjetas de experiencia)
-    document.querySelectorAll('[data-slider]').forEach(initSlider);
-    
-    
-    
-    // Función para abrir el modal
-    function openModal(content, serviceName, showForm) {
-        if (modalBody) modalBody.innerHTML = content;
-        if (modalBody) modalBody.querySelectorAll('[data-slider]').forEach(initSlider);
-        if (modal) modal.style.display = 'block';
-
-        const modalFormContainer = document.querySelector('.modal-service-request-form');
-        if (modalServiceNameInput && modalFormContainer) {
-            if (showForm && serviceName) {
-                modalServiceNameInput.value = serviceName;
-                modalFormContainer.style.display = 'block';
-            } else {
-                modalFormContainer.style.display = 'none';
-            }
-        }
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
     }
-
-    // Event Listeners para botones "Leer Más" de Servicios
-    document.querySelectorAll('.view-service-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const serviceId = button.dataset.serviceId;
-            const service = servicesData[serviceId];
-            if (service && modal) {
-                let modalContent = `<h3>${service.title}</h3>`;
-                if (service.image) {
-                    modalContent += `<img src="${service.image}" alt="${service.title}" class="modal-image">`;
-                }
-                modalContent += service.description;
-                openModal(modalContent, service.title, service.formEnabled);
-            }
-        });
-    });
-
-    // Event Listeners para botones "Ver Más Detalles" de Proyectos
-    document.querySelectorAll('.view-project-button').forEach(button => {
-        button.addEventListener('click', () => {
-            const projectId = button.dataset.projectId;
-            const project = projectsData[projectId];
-            if (project && modal) {
-                let modalContent = `<h3>${project.title}</h3>`;
-                if (project.image) {
-                    modalContent += `<img src="${project.image}" alt="${project.title}" class="modal-image">`;
-                }
-                modalContent += project.fullDescription;
-                openModal(modalContent, null, project.formEnabled); // No se pasa nombre de servicio para el form del modal
-            }
-        });
-    });
+}
 
 
-    // Cerrar Modal
-    if (closeButton) {
-        closeButton.onclick = function() {
-            if (modal) modal.style.display = "none";
-        }
-    }
-    if (modal) {
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    }
+/* ===== Slider de fotos (experiencia laboral) ===== */
+.slider {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background-color: var(--light-gray);
+}
+.slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s ease;
+}
+.slider-slide {
+    flex: 0 0 100%;
+    height: 100%;
+}
+.slider .slider-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(42, 42, 114, 0.75);
+    color: var(--white);
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.slider-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+.slider-prev { left: 10px; }
+.slider-next { right: 10px; }
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 2;
+}
+.slider-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+}
+.slider-dot.active {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.slider:focus-visible {
+    outline: 3px solid var(--secondary-color);
+    outline-offset: -3px;
+}
+.modal .slider {
+    aspect-ratio: 16 / 10;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
 
-    // --- Smooth Scrolling para anclas del menú ---
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            // Solo previene el default si el href no es solo "#" (usado a veces para botones dummy)
-            if (this.getAttribute('href') !== "#" && document.querySelector(this.getAttribute('href'))) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // --- Manejo de Formularios (Ejemplo básico, sin envío real) ---
-    const newsletterForm = document.getElementById('newsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('newsletterEmail').value;
-            if (email) {
-                alert(`Gracias por suscribirte, ${email}! (Esto es una demo)`);
-                this.reset();
-            } else {
-                alert("Por favor, ingresa un correo electrónico.");
-            }
-        });
-    }
-
-    const serviceRequestForm = document.getElementById('serviceRequestForm');
-    if (serviceRequestForm) {
-        serviceRequestForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('userName').value;
-            const email = document.getElementById('userEmail').value;
-            const serviceType = document.getElementById('serviceType').value;
-            const message = document.getElementById('message').value;
-
-            if (name && email && serviceType && message) {
-                alert(`Solicitud de servicio recibida de ${name} para ${serviceType}. Nos pondremos en contacto pronto. (Esto es una demo)`);
-                // Aquí integrarías el envío a un backend o servicio de email.
-                this.reset();
-            } else {
-                alert("Por favor, completa todos los campos requeridos.");
-            }
-        });
-    }
-
-    const modalServiceForm = document.getElementById('modalServiceForm');
-    if (modalServiceForm) {
-        modalServiceForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const serviceName = document.getElementById('modalServiceName').value;
-            const userName = document.getElementById('modalUserName').value;
-            const userEmail = document.getElementById('modalUserEmail').value;
-
-            if (userName && userEmail && serviceName) {
-                 alert(`Solicitud de información para "${serviceName}" recibida de ${userName} (${userEmail}). Nos pondremos en contacto. (Esto es una demo)`);
-                 this.reset();
-                 if (modal) modal.style.display = "none"; // Cierra el modal después de enviar
-            } else {
-                 alert("Por favor, completa tu nombre y correo electrónico.");
-            }
-        });
-    }
-
-
-    // --- Actualizar año en el footer ---
-    const currentYearSpan = document.getElementById('currentYear');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
-    }
-
-    // --- Activar enlace del menú según la sección visible (opcional, más avanzado) ---
-    // Puedes implementar Intersection Observer API para esto si lo deseas.
-    // Por ahora, lo mantenemos simple.
-
-});
+/* ===== Tarjeta y detalle de experiencia ===== */
+.experience-item .gallery-item-info {
+    justify-content: flex-start;
+}
+.experience-item .gallery-item-info p {
+    line-height: 1.5;
+}
+.exp-company {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.exp-meta {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+    margin-bottom: 6px;
+}
+.exp-meta i,
+.exp-tech i {
+    color: var(--secondary-color);
+    width: 18px;
+}
+.exp-tech {
+    font-size: 0.9em;
+    color: var(--dark-gray);
+}
+#modal-body p,
+#modal-body li {
+    line-height: 1.5;
+}
+#modal-body ul {
+    margin: 0 0 1em 20px;
+}
+#modal-body h4 {
+    margin: 15px 0 5px;
+    color: var(--primary-color);
+}
